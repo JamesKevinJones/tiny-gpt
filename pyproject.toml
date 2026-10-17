@@ -1,0 +1,17 @@
+[project]
+name = "tiny-gpt"
+version = "0.1.0"
+description = "A small GPT trained from scratch on TinyStories, sized for an RTX 4050 (6 GB)."
+requires-python = ">=3.12,<3.13"
+dependencies = ["torch>=2.9", "numpy>=2.0"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu130" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
