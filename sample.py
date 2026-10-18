@@ -26,7 +26,7 @@ args = p.parse_args()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 tok = Tokenizer.load(os.path.join(ROOT, "data", "tokenizer.json"))
-ckpt = torch.load(args.ckpt, map_location=device)
+ckpt = torch.load(args.ckpt, map_location="cpu")  # load_state_dict copies weights to the GPU
 model = GPT(GPTConfig(**ckpt["config"])).to(device).eval()
 model.load_state_dict(ckpt["model"])
 print(f"checkpoint: iter {ckpt['iter']}, best val loss {ckpt['best_val']:.3f}\n")
