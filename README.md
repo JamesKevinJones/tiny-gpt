@@ -44,7 +44,23 @@ and then a "little cactus" in the same story). By step 8000, characters stay
 consistent for the whole story. The remaining flaws are logic ones, such as
 "she got a paper to prevent Spot from being in trouble".
 
-## Run it
+## Try the trained model
+
+No training or dataset download needed. The
+[v1.0 release](https://github.com/JamesKevinJones/tiny-gpt/releases/tag/v1.0)
+has the weights (110 MB) and the tokenizer. Generating text runs fine on a CPU.
+
+```bash
+git clone https://github.com/JamesKevinJones/tiny-gpt && cd tiny-gpt
+uv sync
+curl -L --create-dirs -o data/tokenizer.json https://github.com/JamesKevinJones/tiny-gpt/releases/download/v1.0/tokenizer.json
+curl -L --create-dirs -o out/tiny-gpt-27m.pt https://github.com/JamesKevinJones/tiny-gpt/releases/download/v1.0/tiny-gpt-27m.pt
+uv run sample.py --ckpt out/tiny-gpt-27m.pt --prompt "The little dragon was scared because" --num 3
+```
+
+The release also has `SHA256SUMS` for checking the downloads.
+
+## Train it yourself
 
 Needs [uv](https://docs.astral.sh/uv/) and an NVIDIA GPU. It falls back to the
 CPU, but training there takes days.

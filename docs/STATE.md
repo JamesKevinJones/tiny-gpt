@@ -18,7 +18,7 @@ Published at https://github.com/JamesKevinJones/tiny-gpt (public, branch `main`)
 ## The exact next step
 
 Pick one of these:
-1. **Finish publishing (Kevin's steps):** `gh secret set CLAUDE_API_KEY --repo JamesKevinJones/tiny-gpt` so the CI security check can run. Optionally attach the model to a release: `gh release create v1.0 out/ckpt.pt`. It's 330 MB; weights only would be about 110 MB.
+1. **Finish publishing (Kevin's step):** `gh secret set CLAUDE_API_KEY --repo JamesKevinJones/tiny-gpt` so the CI security check can run. The v1.0 release (weights-only `tiny-gpt-27m.pt`, 110 MB, plus `tokenizer.json` and `SHA256SUMS`) is up. To rebuild it, see `out/release/`. It's `ckpt.pt` minus the `optim` key.
 2. **Experiment:** each idea is one flag or a few lines. Try a longer run (`--max_iters 16000`, about a full epoch, roughly 3.5 h), a bigger model (n_layer 12, check VRAM with `torch.cuda.max_memory_allocated()`), or an evaluation script that scores the model on held-out stories.
 
 ## Open questions
