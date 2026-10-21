@@ -48,7 +48,7 @@ ckpt_path = os.path.join(args.out, "ckpt.pt")
 if args.resume:
     # Load to CPU: on the GPU this 330 MB copy (weights + optimizer state) would sit
     # beside the live model and push a 6 GB card into slow shared memory.
-    ckpt = torch.load(ckpt_path, map_location="cpu")
+    ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=True)
     cfg = GPTConfig(**ckpt["config"])
 else:
     cfg = GPTConfig(vocab_size=tok.vocab_size)
