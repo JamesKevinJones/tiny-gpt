@@ -19,6 +19,16 @@ uv run tokenizer.py
 
 Prints `ok: ... bytes -> ... tokens`. Any assertion error means encode/decode or the BPE trainer broke.
 
+## Fast automated tests
+
+```bash
+uv run python -m unittest discover -s tests -v
+```
+
+The eight tests cover tokenizer round trips and save/load, causal attention,
+loss, tied weights, and generation past the context window. CI uses CPU PyTorch
+and runs these tests plus the tokenizer self-check without downloading data.
+
 ## Data (once, about 15 min: 2.2 GB download plus tokenizing)
 
 ```bash
