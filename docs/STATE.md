@@ -19,12 +19,17 @@ Published at https://github.com/JamesKevinJones/tiny-gpt (public, branch `main`)
 - The new tests and tokenizer self-check passed locally. The `v1.0` release
   weights and tokenizer matched `SHA256SUMS`; CPU sampling printed a story and
   the checkpoint's iteration 8000 / best validation loss 1.242.
+- PR #2's CPU test job passed in 20 seconds. The security action returned an
+  internal 401 invalid-key error but still marked its job green. The workflow
+  now checks its result file and will fail when a review did not complete.
 
 ## The exact next step
 
-Run the new CI on the polish PR, then review and merge it if green. The original
-training speed and loss curve still have no raw log in the repository; keep
-them labelled as original-run figures until a dated log can be published.
+Update the repository's `CLAUDE_API_KEY` secret through GitHub's secret settings
+and rerun PR #2's security workflow; never paste the key into chat. Merge only
+after that review and the CPU test job pass. The original training speed and
+loss curve still have no raw log in the repository; keep them labelled as
+original-run figures until a dated log can be published.
 
 ## Open questions
 
