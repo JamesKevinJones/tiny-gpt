@@ -1,5 +1,8 @@
 # tiny-gpt
 
+[![CI](https://github.com/JamesKevinJones/tiny-gpt/actions/workflows/ci.yml/badge.svg)](https://github.com/JamesKevinJones/tiny-gpt/actions/workflows/ci.yml)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+
 A GPT-2 style language model built from scratch and trained on one laptop. It
 writes short children's stories:
 
@@ -26,6 +29,14 @@ weights.
 | Hardware | RTX 4050 Laptop (6 GB), i5-13420H, 16 GB RAM |
 | Speed | 33-47k tokens/s, 3.4 GiB peak VRAM, about 2 h of GPU time across three sessions |
 | Final loss | train 1.232, **val 1.242** |
+
+The training figures above are from the original run recorded on 18 Oct 2026
+in [project state](docs/STATE.md). I verified the published `v1.0` weights and
+tokenizer on 10 Nov 2026 from commit `0ad003623381`: both matched the release's
+`SHA256SUMS`, and `uv run sample.py --ckpt out/release/tiny-gpt-27m.pt --tokens 30`
+generated text on CPU. The checkpoint reported iteration 8000 and best
+validation loss 1.242. This verifies the released checkpoint and its metadata;
+the speed, VRAM and loss curve were not independently rerun in this review.
 
 Validation loss over training:
 
@@ -60,6 +71,14 @@ uv run sample.py --ckpt out/tiny-gpt-27m.pt --prompt "The little dragon was scar
 
 The release also has `SHA256SUMS` for checking the downloads.
 
+## Tests and CI
+
+Run `uv run python -m unittest discover -s tests -v` and `uv run tokenizer.py`.
+The tests check Unicode and BPE round trips, saved-tokenizer consistency, causal
+attention, training loss, tied weights and generation beyond the context window.
+CI runs the same checks on CPU PyTorch without a model key or dataset download.
+Training and the reported final loss are not rerun in CI.
+
 ## Train it yourself
 
 Needs [uv](https://docs.astral.sh/uv/) and an NVIDIA GPU. It falls back to the
@@ -77,6 +96,19 @@ If training stops, `uv run train.py --resume` continues from the last
 checkpoint.
 
 ## How it works
+
+```mermaid
+flowchart LR
+    Data[TinyStories] --> BPE[Byte-level BPE]
+    BPE --> Tokens[Token IDs]
+    Tokens --> Train[Next-token training]
+    Train --> Weights[Checkpoint]
+    Prompt[Prompt] --> BPE
+    Tokens --> GPT[Decoder-only transformer]
+    Weights --> GPT
+    GPT --> Sample[Top-k sampling]
+    Sample --> Story[Story]
+```
 
 | File | What it does |
 |---|---|
@@ -103,3 +135,10 @@ of GPT-2's 50k, why no `torch.compile`) are in
   model. That pushed a 6 GB card to its limit, and Windows paged GPU memory into
   system RAM, so speed fell from 34k to 7k tokens/s. Loading to CPU first fixed
   it, because `load_state_dict` copies each tensor to the model's device anyway.
+
+## Limitations and licence
+
+This is a TinyStories model, not a general assistant. Its 512-token context and
+English-focused tokenizer limit longer and multilingual prompts. The published
+loss is from the original training run, not a fresh CI evaluation. The code is
+licensed under [MIT](LICENSE).

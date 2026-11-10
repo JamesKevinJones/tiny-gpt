@@ -3,7 +3,7 @@
 > Updated at the end of every session, by whichever agent was driving.
 > Keep it under a page. This is a baton, not a diary.
 
-**Last updated:** 2026-10-21 by claude-code
+**Last updated:** 2026-11-10 by Codex
 
 ## Where things stand
 
@@ -13,13 +13,18 @@ Published at https://github.com/JamesKevinJones/tiny-gpt (public, branch `main`)
 
 ## In progress
 
-- Nothing.
+- `polish/proof` adds eight standard-library tests, CPU-only CI, an MIT licence,
+  a gated/pinned security workflow and README verification notes. No model or
+  training code changed.
+- The new tests and tokenizer self-check passed locally. The `v1.0` release
+  weights and tokenizer matched `SHA256SUMS`; CPU sampling printed a story and
+  the checkpoint's iteration 8000 / best validation loss 1.242.
 
 ## The exact next step
 
-Pick one of these:
-1. **Finish publishing (Kevin's step):** `gh secret set CLAUDE_API_KEY --repo JamesKevinJones/tiny-gpt` so the CI security check can run. The v1.0 release (weights-only `tiny-gpt-27m.pt`, 110 MB, plus `tokenizer.json` and `SHA256SUMS`) is up. To rebuild it, see `out/release/`. It's `ckpt.pt` minus the `optim` key.
-2. **Experiment:** each idea is one flag or a few lines. Try a longer run (`--max_iters 16000`, about a full epoch, roughly 3.5 h), a bigger model (n_layer 12, check VRAM with `torch.cuda.max_memory_allocated()`), or an evaluation script that scores the model on held-out stories.
+Run the new CI on the polish PR, then review and merge it if green. The original
+training speed and loss curve still have no raw log in the repository; keep
+them labelled as original-run figures until a dated log can be published.
 
 ## Open questions
 
